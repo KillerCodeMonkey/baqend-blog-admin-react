@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { className } from 'react-dom'
 import { db } from 'baqend'
 
 import FlashMessage from '../shared/FlashMessage'

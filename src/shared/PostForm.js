@@ -1,5 +1,18 @@
 import React, { Component, PropTypes } from 'react'
-import { className, htmlFor } from 'react-dom'
+import AppData from './AppData'
+
+class TagBtn extends Component {
+  render() {
+    return (
+      <div
+        role="group"
+        className={'btn btn-default' + this.props.active}
+        onClick={ e => this.props.toggleTag(e, this.props.tag) }>
+        { this.props.tag.name }
+      </div>
+    )
+  }
+}
 
 class PostForm extends Component {
   constructor(props) {
@@ -7,24 +20,49 @@ class PostForm extends Component {
 
     this.state = {
       post: this.props.post || {},
-      form: {}
+      form: {},
+      tags: this.props.tags
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.toggleTag = this.toggleTag.bind(this)
   }
 
   handleChange(event) {
     let changes = {}
-    changes.form = {
+    Object.assign(this.state.form, {
       [event.target.name]: event.target.value
+    })
+    this.setState({
+      form: this.state.form
+    })
+  }
+
+  toggleTag(event, tag) {
+    let tags = this.state.tags
+
+    if (tags.has(tag)) {
+      tags.delete(tag)
+    } else {
+      tags.add(tag)
     }
-    this.setState(changes)
+    Object.assign(this.state.form, {
+      tags: tags
+    })
+console.log(this.state.form)
+    this.setState({
+      form: this.state.form
+    })
   }
 
   render() {
+     let tagBtns = AppData.tags.map((tag) => {
+      return <TagBtn key={ tag.id } active={this.state.tags.has(tag) ? ' active' : ''} toggleTag={ this.toggleTag } tag={ tag } />
+    })
+
     return (
       <form onSubmit={ e => {
-        this.props.handleSubmit(e, this.state.form)}
+        this.props.handleSubmit(e, this.state.form, this.state.tags)}
       }>
         <div className="form-group">
           <label htmlFor="title">Titel</label>
@@ -46,6 +84,9 @@ class PostForm extends Component {
             className="form-control"
             defaultValue={ (new Date(this.state.post.publishedAt)).toISOString() }
             onChange={ this.handleChange } />
+        </div>
+        <div className="btn-group" role="group">
+          { tagBtns }
         </div>
         <div className="form-group">
           <label htmlFor="description">Beschreibung</label>
@@ -77,6 +118,7 @@ class PostForm extends Component {
 
 PostForm.propTypes = {
   'post': PropTypes.object,
+  'tags': PropTypes.object,
   'handleSubmit': PropTypes.func.isRequired
 }
 

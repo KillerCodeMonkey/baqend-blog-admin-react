@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { className } from 'react-dom'
 
 class FlashMessage extends Component {
   render() {

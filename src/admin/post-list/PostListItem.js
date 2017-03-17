@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
-import { db } from 'baqend'
 
 class PostListItem extends Component {
   render() {

@@ -17,6 +17,7 @@ import Login from './login/Login'
 import Admin from './admin/Admin'
 import PostList from './admin/post-list/PostList'
 import PostDetail from './admin/post-detail/PostDetail'
+import TagList from './admin/tag-list/TagList'
 
 class Root extends Component {
   constructor(props) {
@@ -70,6 +71,7 @@ class Root extends Component {
               <IndexRoute component={PostList} />
               <Route path="post-detail/:slug" component={PostDetail} />
               <Route path="posts" component={PostList} />
+              <Route path="tags" component={TagList} />
             </Route>
           </Route>
           <Redirect from="*" to="/login" />

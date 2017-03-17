@@ -30,7 +30,7 @@ class Admin extends Component {
                   <IndexLink to="/admin">Beiträge</IndexLink>
                 </li>
                 <li>
-                  <Link to="/tags">Tags</Link>
+                  <Link to="/admin/tags">Tags</Link>
                 </li>
               </ul>
               <ul className="nav navbar-nav navbar-right">

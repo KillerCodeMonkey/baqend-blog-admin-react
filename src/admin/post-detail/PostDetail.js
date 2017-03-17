@@ -27,7 +27,6 @@ class PostDetail extends Component {
       })
       .then(post => {
         this.post = post
-
         this.setState({
           post: post,
           loading: false
@@ -46,15 +45,17 @@ class PostDetail extends Component {
       })
   }
 
-  handleSubmit(event, formData) {
+  handleSubmit(event, formData, tags) {
     event.preventDefault()
 
     Object.assign(this.post, formData)
+    this.post.tags = tags
 
     this.post
       .update()
       .then((post) => {
         this.post = post
+
         this.setState({
           post: post
         })
@@ -64,7 +65,8 @@ class PostDetail extends Component {
   render() {
     let postForm, commentList
     if (this.state.post) {
-      postForm = <PostForm post={ this.state.post } handleSubmit={ this.handleSubmit } />
+      let tags = this.state.post.tags ? this.state.post.tags : new db.Set()
+      postForm = <PostForm post={ this.state.post } tags={tags} handleSubmit={ this.handleSubmit } />
     }
     if (this.state.comments.length) {
       commentList = <CommentList comments={ this.state.comments } />
