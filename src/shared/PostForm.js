@@ -49,7 +49,7 @@ class PostForm extends Component {
     Object.assign(this.state.form, {
       tags: tags
     })
-console.log(this.state.form)
+
     this.setState({
       form: this.state.form
     })
