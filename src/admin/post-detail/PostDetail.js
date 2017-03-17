@@ -26,6 +26,8 @@ class PostDetail extends Component {
           .singleResult()
       })
       .then(post => {
+        this.post = post
+
         this.setState({
           post: post,
           loading: false
@@ -45,7 +47,18 @@ class PostDetail extends Component {
   }
 
   handleSubmit(event, formData) {
-    console.log(event, formData)
+    event.preventDefault()
+
+    Object.assign(this.post, formData)
+
+    this.post
+      .update()
+      .then((post) => {
+        this.post = post
+        this.setState({
+          post: post
+        })
+      })
   }
 
   render() {

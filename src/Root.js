@@ -11,6 +11,7 @@ import {
 import { db } from 'baqend'
 
 import App from './App'
+import AppData from './shared/AppData'
 import Login from './login/Login'
 
 import Admin from './admin/Admin'
@@ -37,14 +38,19 @@ class Root extends Component {
   }
 
   isNotLoggedIn(nextState, replace, callback) {
-    db.ready().then(() => {
-      if (!db.User.me) {
-        replace({
-          pathname: '/login'
-        })
-      }
-      callback()
-    })
+    db.ready()
+      .then(() => {
+        if (!db.User.me) {
+          replace({
+            pathname: '/login'
+          })
+        }
+        return db.Tag.find().resultList()
+      })
+      .then((tags) => {
+        AppData.tags = tags
+        callback()
+      })
   }
 
   connectToDb(_nextState, _replace, callback) {

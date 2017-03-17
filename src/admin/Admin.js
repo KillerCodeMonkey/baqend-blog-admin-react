@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter, IndexLink, Link } from 'react-router'
 
 import { db } from 'baqend'
 
@@ -22,18 +22,16 @@ class Admin extends Component {
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
               <a className="navbar-brand" href="#">Anja's Blog :)</a>
             </div>
-            <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div>
               <ul className="nav navbar-nav">
-                <li className="active"><a href="#">Beiträge <span className="sr-only">(current)</span></a></li>
-                <li><a href="#">Tags</a></li>
+                <li>
+                  <IndexLink to="/admin">Beiträge</IndexLink>
+                </li>
+                <li>
+                  <Link to="/tags">Tags</Link>
+                </li>
               </ul>
               <ul className="nav navbar-nav navbar-right">
                 <li>
@@ -43,8 +41,6 @@ class Admin extends Component {
             </div>
           </div>
         </nav>
-
-
         <br />
         <div className="container">
           { this.props.children }

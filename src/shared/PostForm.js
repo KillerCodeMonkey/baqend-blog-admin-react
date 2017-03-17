@@ -20,14 +20,10 @@ class PostForm extends Component {
     }
     this.setState(changes)
   }
-  handleSubmit() {
-
-  }
 
   render() {
     return (
       <form onSubmit={ e => {
-        e.preventDefault()
         this.props.handleSubmit(e, this.state.form)}
       }>
         <div className="form-group">
@@ -41,7 +37,6 @@ class PostForm extends Component {
             placeholder="Titel"
             onChange={ this.handleChange } />
         </div>
-        {this.state.post.published_at}
         <div className="form-group">
           <label htmlFor="published_at">Datum</label>
           <input
@@ -51,6 +46,17 @@ class PostForm extends Component {
             className="form-control"
             defaultValue={ (new Date(this.state.post.publishedAt)).toISOString() }
             onChange={ this.handleChange } />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Beschreibung</label>
+          <textarea
+            name="text"
+            className="form-control"
+            rows="3"
+            placeholder="Your short description"
+            onChange={ this.handleChange }
+            defaultValue={ this.state.post.description }>
+          </textarea>
         </div>
         <div className="form-group">
           <label htmlFor="text">Text (Markdown)</label>
