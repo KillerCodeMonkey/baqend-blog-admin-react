@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import PostListItem from '../../shared/PostListItem'
+import PostListItem from './PostListItem'
 
 import { db } from 'baqend'
 

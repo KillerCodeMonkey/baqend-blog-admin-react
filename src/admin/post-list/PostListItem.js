@@ -3,14 +3,6 @@ import { Link } from 'react-router'
 import { db } from 'baqend'
 
 class PostListItem extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      comments: []
-    }
-  }
-
   render() {
     const date = new Date(this.props.post.publishedAt)
     const dateTimeString = date.toDateString() + ' ' + date.toTimeString()

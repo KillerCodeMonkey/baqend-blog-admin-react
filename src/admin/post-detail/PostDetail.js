@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { db } from 'baqend'
 
 import PostForm from '../../shared/PostForm'
+import CommentList from './CommentList'
 
 class PostDetail extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class PostDetail extends Component {
           post: post,
           loading: false
         })
-        return db.Comment.find().in('id', post.comments).resultList()
+        return db.Comment.find().in('id', Array.from(post.comments)).resultList()
       })
       .then(comments => {
         this.setState({
@@ -48,14 +49,19 @@ class PostDetail extends Component {
   }
 
   render() {
-    let postForm
+    let postForm, commentList
     if (this.state.post) {
-      postForm = <PostForm post={ this.state.post } comments={ this.state.comments } handleSubmit={ this.handleSubmit } />
+      postForm = <PostForm post={ this.state.post } handleSubmit={ this.handleSubmit } />
+    }
+    if (this.state.comments.length) {
+      commentList = <CommentList comments={ this.state.comments } />
     }
 
     return (
       <div className="container-fluid">
         { postForm }
+
+        { commentList }
       </div>
     )
   }
