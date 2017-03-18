@@ -84,7 +84,7 @@ class PostForm extends Component {
             name="publishedAt"
             id="publishedAt"
             className="form-control"
-            defaultValue={ (new Date(this.state.post.publishedAt)).toISOString() }
+            defaultValue={ this.state.post.publishedAt ? (new Date(this.state.post.publishedAt)).toISOString() : '' }
             onChange={ this.handleChange } />
         </div>
         <div className="btn-group" role="group">
