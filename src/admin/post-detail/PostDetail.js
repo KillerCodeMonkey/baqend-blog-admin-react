@@ -173,6 +173,7 @@ class PostDetail extends Component {
   handleSubmit(event, formData, tags) {
     event.preventDefault()
 
+    formData.publishedAt = formData.publishedAt ? new Date(formData.publishedAt) : null
     Object.assign(this.post, formData)
     this.post.tags = tags
 

@@ -25,6 +25,7 @@ class PostList extends Component {
           .resultList()
       })
       .then(posts => {
+        console.log(posts)
         this.setState({
           posts: posts,
           loading: false
@@ -68,11 +69,12 @@ class PostList extends Component {
     return (
       <div className="container-fluid">
         <Link to="/admin/posts/new" className="btn btn-success">Neuer Beitrag</Link>
-        <table className="table">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th>Title</th>
               <th>Veröffentlicht</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
