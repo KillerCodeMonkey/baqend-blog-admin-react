@@ -87,8 +87,11 @@ class PostForm extends Component {
             defaultValue={ this.state.post.publishedAt ? (new Date(this.state.post.publishedAt)).toISOString() : '' }
             onChange={ this.handleChange } />
         </div>
-        <div className="btn-group" role="group">
-          { tagBtns }
+        <div className="form-group">
+          <label>Tags</label><br/>
+          <div className="btn-group" role="group">
+            { tagBtns }
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="description">Beschreibung</label>
@@ -112,6 +115,9 @@ class PostForm extends Component {
             defaultValue={ this.state.post.text }>
           </textarea>
         </div>
+
+
+
         <button type="submit" className="btn btn-primary">Speichern</button>
       </form>
     )
