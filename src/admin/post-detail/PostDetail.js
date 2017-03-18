@@ -89,7 +89,10 @@ class PostDetail extends Component {
   }
 
   handleUploadImage(event) {
-    const file = new db.File({data: event.target.files[0]})
+    const file = new db.File({
+      data: event.target.files[0],
+      parent: '/www/images/posts/' + this.post.key
+    })
 
     file
       .upload()
@@ -107,7 +110,10 @@ class PostDetail extends Component {
   }
 
   handleUploadPreview(event) {
-    const file = new db.File({data: event.target.files[0]})
+    const file = new db.File({
+      data: event.target.files[0],
+      parent: '/www/images/posts/' + this.post.key
+    })
 
     file
       .upload()
