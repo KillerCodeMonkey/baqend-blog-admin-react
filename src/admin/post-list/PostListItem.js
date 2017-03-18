@@ -16,6 +16,9 @@ class PostListItem extends Component {
         <td>
           { dateTimeString }
         </td>
+        <td>
+          <button type="button" className="btn btn-danger" onClick={e => this.props.handleDelete(e, this.props.post) }>Löschen</button>
+        </td>
       </tr>
     )
   }
@@ -23,6 +26,7 @@ class PostListItem extends Component {
 
 PostListItem.propTypes = {
   'post': PropTypes.object.isRequired,
+  'handleDelete': PropTypes.func.isRequired
 }
 
 export default PostListItem

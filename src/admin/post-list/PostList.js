@@ -13,6 +13,8 @@ class PostList extends Component {
       posts: [],
       loading: true
     }
+
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
@@ -35,9 +37,32 @@ class PostList extends Component {
       })
   }
 
+  handleDelete(event, post) {
+    event.preventDefault()
+    const index = this.state.posts.indexOf(post)
+
+    let deleteTasks = [
+      post.delete()
+    ]
+    if (post.preview_image) {
+      deleteTasks.push(post.preview_image.delete())
+    }
+    post.images.map((image) => {
+      deleteTasks.push(image.delete())
+    })
+
+    Promise.all(deleteTasks).then(() => {
+      this.state.posts.splice(index, 1)
+
+      this.setState({
+        posts: this.state.posts
+      })
+    })
+  }
+
   render() {
     let postRows = this.state.posts.map((post) => {
-      return <PostListItem post={ post } key={ post.id } />
+      return <PostListItem post={ post } handleDelete={ this.handleDelete } key={ post.id } />
     })
 
     return (
