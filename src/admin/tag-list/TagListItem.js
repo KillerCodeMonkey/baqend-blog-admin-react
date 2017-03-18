@@ -5,26 +5,29 @@ class TagListItem extends Component {
     super(props)
 
     this.state = {
-      tag: {
-        name: this.props.tag.name,
-        alias: this.props.tag.alias
-      }
+      name: this.props.tag.name,
+      alias: this.props.tag.alias
     }
     this.handleChange = this.handleChange.bind(this)
     this.onEdit = this.onEdit.bind(this)
     this.onDelete = this.onDelete.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      name: nextProps.tag.name,
+      alias: nextProps.tag.alias
+    })
+  }
+
   handleChange(event) {
-    let changes = {}
-    changes.tag = {
+    this.setState({
       [event.target.name]: event.target.value
-    }
-    this.setState(changes)
+    })
   }
 
   onEdit(event) {
-    this.props.handleEdit(event, this.props.tag, this.state.tag)
+    this.props.handleEdit(event, this.props.tag, {alias: this.state.alias, name: this.state.name})
   }
 
   onDelete(event) {
@@ -35,10 +38,10 @@ class TagListItem extends Component {
     return (
       <tr>
         <td>
-          <input type="text" className="form-control" name="name" defaultValue={ this.props.tag.name } onChange={ this.handleChange }/>
+          <input type="text" className="form-control" name="name" value={ this.state.name } onChange={ this.handleChange }/>
         </td>
         <td>
-          <input type="text" className="form-control" name="alias" defaultValue={ this.props.tag.alias } onChange={ this.handleChange }/>
+          <input type="text" className="form-control" name="alias" value={ this.state.alias } onChange={ this.handleChange }/>
         </td>
         <td>
           <button className="btn btn-primary" onClick={ this.onEdit }>

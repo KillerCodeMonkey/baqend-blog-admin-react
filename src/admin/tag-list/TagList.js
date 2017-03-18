@@ -26,13 +26,13 @@ class TagList extends Component {
   handleCreate(event) {
     event.preventDefault()
 
-    if (!this.state.newTag.name || !this.state.newTag.alias) {
+    if (!this.state.newTag.name) {
       return
     }
 
     let tag = new db.Tag(this.state.newTag)
     tag
-      .save()
+      .save({refresh: true})
       .then((tag) => {
         AppData.tags.push(tag)
 
@@ -81,8 +81,9 @@ class TagList extends Component {
     Object.assign(AppData.tags[index], formData)
 
     AppData.tags[index]
-      .update()
+      .save({refresh: true})
       .then((tag) => {
+        AppData.tags[index] = tag
         this.setState({
           tags: AppData.tags
         })

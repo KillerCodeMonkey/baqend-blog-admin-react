@@ -19,7 +19,9 @@ class PostForm extends Component {
     super(props)
 
     this.state = {
-      post: this.props.post || {},
+      post: this.props.post || {
+        publishedAt: Date.now()
+      },
       form: {},
       tags: this.props.tags
     }
@@ -76,11 +78,11 @@ class PostForm extends Component {
             onChange={ this.handleChange } />
         </div>
         <div className="form-group">
-          <label htmlFor="published_at">Datum</label>
+          <label htmlFor="publishedAt">Datum</label>
           <input
             type="string"
-            name="published_at"
-            id="published_at"
+            name="publishedAt"
+            id="publishedAt"
             className="form-control"
             defaultValue={ (new Date(this.state.post.publishedAt)).toISOString() }
             onChange={ this.handleChange } />
@@ -91,7 +93,7 @@ class PostForm extends Component {
         <div className="form-group">
           <label htmlFor="description">Beschreibung</label>
           <textarea
-            name="text"
+            name="description"
             className="form-control"
             rows="3"
             placeholder="Your short description"

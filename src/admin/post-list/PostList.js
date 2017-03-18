@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 
 import PostListItem from './PostListItem'
 
@@ -41,6 +42,7 @@ class PostList extends Component {
 
     return (
       <div className="container-fluid">
+        <Link to="/admin/posts/new" className="btn btn-success">Neuer Beitrag</Link>
         <table className="table">
           <thead>
             <tr>

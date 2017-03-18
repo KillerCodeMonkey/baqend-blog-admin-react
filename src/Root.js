@@ -16,6 +16,7 @@ import Login from './login/Login'
 
 import Admin from './admin/Admin'
 import PostList from './admin/post-list/PostList'
+import PostNew from './admin/post-new/PostNew'
 import PostDetail from './admin/post-detail/PostDetail'
 import TagList from './admin/tag-list/TagList'
 
@@ -69,7 +70,8 @@ class Root extends Component {
             <Route path="login" component={Login} onEnter={this.isLoggedIn} />
             <Route path="admin" component={Admin} onEnter={this.isNotLoggedIn} >
               <IndexRoute component={PostList} />
-              <Route path="post-detail/:slug" component={PostDetail} />
+              <Route path="posts/new" component={PostNew} />
+              <Route path="posts/:slug" component={PostDetail} />
               <Route path="posts" component={PostList} />
               <Route path="tags" component={TagList} />
             </Route>

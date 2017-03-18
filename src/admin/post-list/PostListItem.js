@@ -8,7 +8,7 @@ class PostListItem extends Component {
     return (
       <tr>
         <td>
-          <Link to={"/admin/post-detail/" + this.props.post.slug}>
+          <Link to={"/admin/posts/" + this.props.post.slug}>
             { this.props.post.title }
             ({ this.props.post.comments ? this.props.post.comments.size : 0 })
           </Link>
