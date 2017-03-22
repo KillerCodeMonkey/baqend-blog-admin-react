@@ -41,7 +41,7 @@ class TagListItem extends Component {
           <input type="text" className="form-control" name="name" value={ this.state.name } onChange={ this.handleChange }/>
         </td>
         <td>
-          <input type="text" className="form-control" name="alias" value={ this.state.alias } onChange={ this.handleChange }/>
+          <input type="text" readOnly className="form-control" name="alias" value={ this.state.alias } onChange={ this.handleChange }/>
         </td>
         <td>
           <button className="btn btn-primary" onClick={ this.onEdit }>

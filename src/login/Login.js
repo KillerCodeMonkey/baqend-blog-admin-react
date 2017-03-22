@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { db } from 'baqend'
 
+import UserService from '../shared/UserService'
 import FlashMessage from '../shared/FlashMessage'
 
 class Login extends Component {
@@ -29,10 +29,8 @@ class Login extends Component {
       loading: true
     })
 
-    db.ready()
-      .then(() => {
-        return db.User.login(this.state.login, this.state.password)
-      })
+    UserService
+      .login(this.state.login, this.state.password)
       .then(() => {
         this.setState({
           loading: false

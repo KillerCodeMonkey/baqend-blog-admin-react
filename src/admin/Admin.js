@@ -3,6 +3,8 @@ import { withRouter, IndexLink, Link } from 'react-router'
 
 import { db } from 'baqend'
 
+import UserService from '../shared/UserService'
+
 class Admin extends Component {
   constructor(props) {
     super(props)
@@ -11,7 +13,7 @@ class Admin extends Component {
   }
 
   logout() {
-    db.User.logout().then(() => {
+    UserService.logout().then(() => {
       this.props.router.push('/login')
     })
   }

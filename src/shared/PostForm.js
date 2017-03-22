@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import AppData from './AppData'
+import TagService from './TagService'
 
 class TagBtn extends Component {
   render() {
@@ -21,11 +21,16 @@ class PostForm extends Component {
     this.state = {
       post: this.props.post || {},
       form: {},
-      tags: this.props.tags
+      tags: this.props.tags,
+      defaultTags: []
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.toggleTag = this.toggleTag.bind(this)
+  }
+
+  componentDidMount() {
+    TagService.get().then(tags => this.setState({ defaultTags: tags }))
   }
 
   handleChange(event) {
@@ -55,9 +60,12 @@ class PostForm extends Component {
   }
 
   render() {
-     let tagBtns = AppData.tags.map((tag) => {
-      return <TagBtn key={ tag.id } active={this.state.tags.has(tag) ? ' active' : ''} toggleTag={ this.toggleTag } tag={ tag } />
-    })
+    let tagBtns;
+    if (this.state.defaultTags.length) {
+      tagBtns = this.state.defaultTags.map((tag) => {
+        return <TagBtn key={ tag.id } active={this.state.tags.has(tag) ? ' active' : ''} toggleTag={ this.toggleTag } tag={ tag } />
+      })
+    }
 
     return (
       <form onSubmit={ e => {

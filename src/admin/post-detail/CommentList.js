@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 
+import CommentService from '../../shared/CommentService'
 import CommentListItem from './CommentListItem'
-
-import { db } from 'baqend'
 
 class CommentList extends Component {
   constructor(props) {
@@ -15,10 +14,8 @@ class CommentList extends Component {
   }
 
   deleteComment(event, comment) {
-    db.ready()
-      .then(() => {
-        return comment.delete()
-      })
+    CommentService
+      .delete(comment)
       .then(() => {
         const index = this.props.comments.indexOf(comment)
         this.props.comments.splice(index, 1)

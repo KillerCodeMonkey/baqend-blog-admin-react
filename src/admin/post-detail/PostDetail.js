@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react'
 
 import { db } from 'baqend'
 
+import PostService from '../../shared/PostService'
+import CommentService from '../../shared/CommentService'
+
 import PostForm from '../../shared/PostForm'
 import CommentList from './CommentList'
 
@@ -9,7 +12,7 @@ class ImageListItem extends Component {
   render() {
     return (
       <div>
-        <img src={this.props.image.url} alt="image" width="250" height="250" />
+        <img src={this.props.image.url} alt="Beitragsbild" width="250" height="250" />
         <div className="form-group">
           <input type="text" readOnly value={'![Bild](' + this.props.image.url + ')'} className="form-control" />
         </div>
@@ -56,25 +59,15 @@ class PostDetail extends Component {
   }
 
   componentDidMount() {
-    db.ready()
-      .then(() => {
-        return db.Post
-          .find()
-          .equal('slug', this.props.params.slug)
-          .singleResult()
-      })
+    PostService.getBySlug(this.props.params.slug)
       .then(post => {
         this.post = post
-
-        if (!this.post.images) {
-          this.post.images = new db.List()
-        }
 
         this.setState({
           post: post,
           loading: false
         })
-        return db.Comment.find().equal('post', post).resultList()
+        return CommentService.getForPost(post)
       })
       .then(comments => {
         this.setState({
@@ -89,19 +82,8 @@ class PostDetail extends Component {
   }
 
   handleUploadImage(event) {
-    const file = new db.File({
-      data: event.target.files[0],
-      parent: '/www/images/posts/' + this.post.key
-    })
-
-    file
-      .upload()
-      .then((file) => {
-        //upload succeed successfully
-        this.post.images.push(file)
-
-        return this.post.save()
-      })
+    PostService
+      .uploadImage(this.post, event.target.files[0])
       .then((post) => {
         this.setState({
           post: post
@@ -110,19 +92,8 @@ class PostDetail extends Component {
   }
 
   handleUploadPreview(event) {
-    const file = new db.File({
-      data: event.target.files[0],
-      parent: '/www/images/posts/' + this.post.key
-    })
-
-    file
-      .upload()
-      .then((file) => {
-        //upload succeed successfully
-        this.post.preview_image = file
-
-        return this.post.save()
-      })
+    PostService
+      .uploadPreviewImage(this.post, event.target.files[0])
       .then((post) => {
         this.setState({
           post: post
@@ -133,14 +104,7 @@ class PostDetail extends Component {
   handleDeletePreview(event) {
     event.preventDefault()
 
-    this.post
-      .preview_image
-      .delete()
-      .then(() => {
-        this.post.preview_image = null
-
-        return this.post.save()
-      })
+    PostService.deletePreview(this.post)
       .then((post) => {
         this.post = post
 
@@ -153,14 +117,8 @@ class PostDetail extends Component {
   handleDeleteImage(event, image) {
     event.preventDefault()
 
-    image
-      .delete()
-      .then(() => {
-        const index = this.post.images.indexOf(image)
-        this.post.images.splice(index, 1)
-
-        return this.post.save()
-      })
+    PostService
+      .deleteImage(this.post, image)
       .then((post) => {
         this.post = post
 
@@ -173,12 +131,8 @@ class PostDetail extends Component {
   handleSubmit(event, formData, tags) {
     event.preventDefault()
 
-    formData.publishedAt = formData.publishedAt ? new Date(formData.publishedAt) : null
-    Object.assign(this.post, formData)
-    this.post.tags = tags
-
-    this.post
-      .update()
+    PostService
+      .update(this.post, formData, tags)
       .then((post) => {
         this.post = post
 

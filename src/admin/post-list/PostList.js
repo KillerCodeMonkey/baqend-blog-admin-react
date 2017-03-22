@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 
 import PostListItem from './PostListItem'
-
-import { db } from 'baqend'
+import PostService from '../../shared/PostService'
 
 class PostList extends Component {
   constructor(props) {
@@ -18,12 +17,7 @@ class PostList extends Component {
   }
 
   componentDidMount() {
-    db.ready()
-      .then(() => {
-        return db.Post
-          .find()
-          .resultList()
-      })
+    PostService.getAll()
       .then(posts => {
         this.setState({
           posts: posts,
@@ -41,17 +35,7 @@ class PostList extends Component {
     event.preventDefault()
     const index = this.state.posts.indexOf(post)
 
-    let deleteTasks = [
-      post.delete()
-    ]
-    if (post.preview_image) {
-      deleteTasks.push(post.preview_image.delete())
-    }
-    post.images.map((image) => {
-      deleteTasks.push(image.delete())
-    })
-
-    Promise.all(deleteTasks).then(() => {
+    PostService.delete(post).then(() => {
       this.state.posts.splice(index, 1)
 
       this.setState({

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 
 import { db } from 'baqend'
 
+import PostService from '../../shared/PostService'
 import PostForm from '../../shared/PostForm'
 
 class PostNew extends Component {
@@ -17,13 +18,9 @@ class PostNew extends Component {
 
   handleSubmit(event, formData, tags) {
     event.preventDefault()
-    let post = new db.Post()
 
-    Object.assign(post, formData)
-    post.tags = tags
-
-    post
-      .save({ refresh: true })
+    PostService
+      .create(formData, tags)
       .then((post) => {
         this.props.router.push('/admin/posts/' + post.slug)
       })

@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 import { db } from 'baqend'
 
 import TagListItem from './TagListItem'
-import AppData from '../../shared/AppData'
+import TagService from '../../shared/TagService'
 
 class TagList extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      tags: AppData.tags,
+      tags: [],
       newTag: {
         alias: null,
         name: null
@@ -23,6 +23,12 @@ class TagList extends Component {
     this.handleDelete = this.handleDelete.bind(this)
   }
 
+  componentDidMount() {
+    TagService.get().then(tags => {
+      this.setState({ tags: tags })
+    })
+  }
+
   handleCreate(event) {
     event.preventDefault()
 
@@ -30,14 +36,11 @@ class TagList extends Component {
       return
     }
 
-    let tag = new db.Tag(this.state.newTag)
-    tag
-      .save({refresh: true})
-      .then((tag) => {
-        AppData.tags.push(tag)
-
+    TagService
+      .create(this.state.newTag)
+      .then(tags => {
         this.setState({
-          tags: AppData.tags,
+          tags: tags,
           newTag: {
             alias: null,
             name: null
@@ -51,16 +54,11 @@ class TagList extends Component {
   handleDelete(event, tag) {
     event.preventDefault()
 
-    db.ready()
-      .then(() => {
-        return tag.delete()
-      })
-      .then(() => {
-        const index = AppData.tags.indexOf(tag)
-        AppData.tags.splice(index, 1)
-
+    TagService
+      .delete(tag)
+      .then(tags => {
         this.setState({
-          tags: AppData.tags
+          tags: tags
         })
       })
   }
@@ -77,23 +75,23 @@ class TagList extends Component {
   handleEdit(event, tag, formData) {
     event.preventDefault()
 
-    const index = AppData.tags.indexOf(tag)
-    Object.assign(AppData.tags[index], formData)
-
-    AppData.tags[index]
-      .save({refresh: true})
-      .then((tag) => {
-        AppData.tags[index] = tag
+    TagService
+      .update(tag, formData)
+      .then(tags => {
         this.setState({
-          tags: AppData.tags
+          tags: tags
         })
       })
   }
 
   render() {
-    let tagRows = this.state.tags.map((tag) => {
-      return <TagListItem tag={ tag } handleDelete={ this.handleDelete } handleEdit={ this.handleEdit } key={ tag.id } />
-    })
+    let tagRows
+
+    if (this.state.tags.length) {
+      tagRows = this.state.tags.map((tag) => {
+        return <TagListItem tag={ tag } handleDelete={ this.handleDelete } handleEdit={ this.handleEdit } key={ tag.id } />
+      })
+    }
 
     return (
       <div className="container-fluid">

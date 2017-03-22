@@ -11,7 +11,8 @@ import {
 import { db } from 'baqend'
 
 import App from './App'
-import AppData from './shared/AppData'
+import TagService from './shared/TagService'
+import UserService from './shared/UserService'
 import Login from './login/Login'
 
 import Admin from './admin/Admin'
@@ -29,30 +30,22 @@ class Root extends Component {
   }
 
   isLoggedIn(nextState, replace, callback) {
-    db.ready().then(() => {
-      if (db.User.me) {
-        replace({
-          pathname: '/admin/posts'
-        })
-      }
-      callback()
-    })
+    if (UserService.isLoggedIn()) {
+      replace({
+        pathname: '/admin'
+      })
+    }
+
+    callback()
   }
 
   isNotLoggedIn(nextState, replace, callback) {
-    db.ready()
-      .then(() => {
-        if (!db.User.me) {
-          replace({
-            pathname: '/login'
-          })
-        }
-        return db.Tag.find().resultList()
+    if (!UserService.isLoggedIn()) {
+      replace({
+        pathname: '/login'
       })
-      .then((tags) => {
-        AppData.tags = tags
-        callback()
-      })
+    }
+    TagService.get().then(() => callback())
   }
 
   connectToDb(_nextState, _replace, callback) {
@@ -69,10 +62,10 @@ class Root extends Component {
       <Router history={browserHistory}>
         <div>
           <Route path="/" component={ App } onEnter={ this.connectToDb }>
-            <IndexRoute component={ Login } />
+            <IndexRoute component={ Login }  onEnter={ this.isLoggedIn } />
             <Route path="login" component={ Login } onEnter={ this.isLoggedIn } />
             <Route path="admin" component={ Admin } onEnter={ this.isNotLoggedIn } >
-              <IndexRoute component={PostList} />
+              <IndexRoute component={PostList} onEnter={ this.isNotLoggedIn } />
               <Route path="posts/new" component={PostNew} />
               <Route path="posts/:slug" component={PostDetail} />
               <Route path="posts" component={PostList} />
