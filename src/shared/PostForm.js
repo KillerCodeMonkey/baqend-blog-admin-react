@@ -19,9 +19,7 @@ class PostForm extends Component {
     super(props)
 
     this.state = {
-      post: this.props.post || {
-        publishedAt: Date.now()
-      },
+      post: this.props.post || {},
       form: {},
       tags: this.props.tags
     }
@@ -31,7 +29,6 @@ class PostForm extends Component {
   }
 
   handleChange(event) {
-    let changes = {}
     Object.assign(this.state.form, {
       [event.target.name]: event.target.value
     })

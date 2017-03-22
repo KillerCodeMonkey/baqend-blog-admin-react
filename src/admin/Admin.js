@@ -35,7 +35,7 @@ class Admin extends Component {
               </ul>
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="#" onClick={this.logout}>Logout</a>
+                  <a href="#" onClick={ this.logout }>Logout</a>
                 </li>
               </ul>
             </div>

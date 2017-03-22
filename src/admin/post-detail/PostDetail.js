@@ -74,7 +74,7 @@ class PostDetail extends Component {
           post: post,
           loading: false
         })
-        return db.Comment.find().in('id', Array.from(post.comments)).resultList()
+        return db.Comment.find().equal('post', post).resultList()
       })
       .then(comments => {
         this.setState({

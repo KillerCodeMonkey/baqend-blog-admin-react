@@ -25,7 +25,6 @@ class PostList extends Component {
           .resultList()
       })
       .then(posts => {
-        console.log(posts)
         this.setState({
           posts: posts,
           loading: false

@@ -56,6 +56,9 @@ class Root extends Component {
   }
 
   connectToDb(_nextState, _replace, callback) {
+    if (db.isReady && db.isOpen) {
+      return callback()
+    }
     db.connect('blog').then(() => {
       callback()
     })
@@ -65,10 +68,10 @@ class Root extends Component {
     return (
       <Router history={browserHistory}>
         <div>
-          <Route path="/" component={App} onEnter={this.connectToDb}>
-            <IndexRoute component={Login} />
-            <Route path="login" component={Login} onEnter={this.isLoggedIn} />
-            <Route path="admin" component={Admin} onEnter={this.isNotLoggedIn} >
+          <Route path="/" component={ App } onEnter={ this.connectToDb }>
+            <IndexRoute component={ Login } />
+            <Route path="login" component={ Login } onEnter={ this.isLoggedIn } />
+            <Route path="admin" component={ Admin } onEnter={ this.isNotLoggedIn } >
               <IndexRoute component={PostList} />
               <Route path="posts/new" component={PostNew} />
               <Route path="posts/:slug" component={PostDetail} />

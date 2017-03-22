@@ -10,7 +10,8 @@ class Login extends Component {
     this.state = {
       password: '',
       login: '',
-      error: null
+      error: null,
+      loading: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,16 +25,24 @@ class Login extends Component {
       return
     }
 
+    this.setState({
+      loading: true
+    })
+
     db.ready()
       .then(() => {
         return db.User.login(this.state.login, this.state.password)
       })
       .then(() => {
+        this.setState({
+          loading: false
+        })
         this.props.router.push('/admin/posts')
       })
       .catch((err) => {
         this.setState({
-          error: err
+          error: err,
+          loading: false
         })
       })
   }
@@ -70,7 +79,7 @@ class Login extends Component {
                   id="login"
                   name="login"
                   placeholder="username"
-                  onChange={this.handleChange} />
+                  onChange={ this.handleChange } />
               </div>
               <div className="form-group">
                 <input
@@ -79,7 +88,7 @@ class Login extends Component {
                   id="password"
                   name="password"
                   placeholder="******"
-                  onChange={this.handleChange} />
+                  onChange={ this.handleChange } />
               </div>
               <button type="submit" className="btn btn-primary">Go</button>
             </form>
