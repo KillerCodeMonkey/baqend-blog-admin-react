@@ -15,13 +15,15 @@ class CommentListItem extends Component {
     const date = new Date(this.props.comment.createdAt)
     const dateTimeString = date.toDateString() + ' ' + date.toTimeString()
     return (
-      <div className="row">
-        <div className="col-xs-12">
-          {this.props.comment.text}
-          <br />
-          von { this.props.comment.name } ({ dateTimeString })
-          <br/>
-          <button className="btn btn-danger" type="button" onClick={ this.onDelete }>Löschen</button>
+      <div className="panel panel-default">
+        <div className="panel-body">
+          <div className="well well-lg">{this.props.comment.text}</div>
+        </div>
+        <div className="panel-footer clearfix">
+          <div className="pull-left">von { this.props.comment.name } ({ dateTimeString })</div>
+          <div className="pull-right">
+            <button className="btn btn-danger" type="button" onClick={ this.onDelete }>Löschen</button>
+          </div>
         </div>
       </div>
     )

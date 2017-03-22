@@ -10,14 +10,13 @@ class PostListItem extends Component {
         <td>
           <Link to={"/admin/posts/" + this.props.post.slug}>
             { this.props.post.title }
-            ({ this.props.post.comments ? this.props.post.comments.size : 0 })
           </Link>
         </td>
         <td>
           { dateTimeString }
         </td>
         <td>
-          <button type="button" className="btn btn-danger" onClick={e => this.props.handleDelete(e, this.props.post) }>Löschen</button>
+          <button type="button" className="btn btn-danger pull-right" onClick={e => this.props.handleDelete(e, this.props.post) }>Löschen</button>
         </td>
       </tr>
     )

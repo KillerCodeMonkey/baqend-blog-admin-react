@@ -32,7 +32,7 @@ class CommentList extends Component {
     })
 
     return (
-      <div className="container">
+      <div>
         { commentRows }
       </div>
     )

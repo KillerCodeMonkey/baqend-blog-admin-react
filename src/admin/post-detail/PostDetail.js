@@ -11,13 +11,20 @@ import CommentList from './CommentList'
 class ImageListItem extends Component {
   render() {
     return (
-      <div>
-        <img src={this.props.image.url} alt="Beitragsbild" width="250" height="250" />
-        <div className="form-group">
-          <input type="text" readOnly value={'![Bild](' + this.props.image.url + ')'} className="form-control" />
-        </div>
-        <button className="btn btn-danger" onClick={ e => this.props.handleDelete(e, this.props.image) }>entfernen</button>
-      </div>
+      <ul className="media-list">
+        <li className="media">
+          <div className="media-left">
+            <img className="media-object img-responsive img-thumbnail" src={this.props.image.url} alt="Beitragsbild" style={{ width: '250px' }} />
+          </div>
+          <div className="media-body">
+            <h4 className="media-heading">Bild</h4>
+            <div className="form-group">
+              <input type="text" readOnly value={'![Bild](' + this.props.image.url + ')'} className="form-control" />
+            </div>
+            <button className="btn btn-danger" onClick={ e => this.props.handleDelete(e, this.props.image) }>entfernen</button>
+          </div>
+        </li>
+      </ul>
     )
   }
 }
