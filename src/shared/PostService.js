@@ -54,7 +54,7 @@ export default {
       deleteTasks.push(image.delete())
     })
 
-    return deleteTasks.then(() => {
+    return Promise.all(deleteTasks).then(() => {
       if (_loaded) {
         _posts.splice(index, 1)
       }
