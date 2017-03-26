@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import { db } from 'baqend'
-
 import TagListItem from './TagListItem'
 import TagService from '../../shared/TagService'
 
