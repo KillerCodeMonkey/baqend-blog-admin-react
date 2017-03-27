@@ -49,7 +49,9 @@ export function post(state = null, action) {
     case POST_IMAGE_DELETED:
     case POST_IMAGE_UPLOADED:
     case POST_UPDATED:
-      return action.post
+      const postJSON = Object.assign({}, action.post.toJSON(), { acl: null })
+
+      return db.Post.fromJSON(postJSON)
     default:
       return state
   }
