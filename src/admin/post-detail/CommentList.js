@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 
-import CommentService from '../../shared/CommentService'
+import {
+  deleteComment
+} from '../../actions'
+
 import CommentListItem from './CommentListItem'
 
 class CommentList extends Component {
@@ -14,16 +18,7 @@ class CommentList extends Component {
   }
 
   deleteComment(event, comment) {
-    CommentService
-      .delete(comment)
-      .then(() => {
-        const index = this.props.comments.indexOf(comment)
-        this.props.comments.splice(index, 1)
-
-        this.setState({
-          comments: this.props.comments
-        })
-      })
+    this.props.deleteComment(comment)
   }
 
   render() {
@@ -43,4 +38,7 @@ CommentList.propTypes = {
   comments: PropTypes.array.isRequired
 }
 
-export default CommentList
+export default connect(
+  state => ({}),
+  { deleteComment }
+)(CommentList)

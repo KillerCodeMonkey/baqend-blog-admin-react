@@ -23,10 +23,9 @@ import {
   user
 } from './reducers'
 
-import { fetchTags } from './actions'
+import { fetchTags, setUser } from './actions'
 
 import App from './App'
-import UserService from './shared/UserService'
 import Login from './login/Login'
 
 import Admin from './admin/Admin'
@@ -54,17 +53,16 @@ const store = createStore(
 const history = syncHistoryWithStore(browserHistory, store)
 
 const isLoggedIn = (nextState, replace, callback) => {
-  if (UserService.isLoggedIn()) {
+  if (store.getState().user) {
     replace({
       pathname: '/admin'
     })
   }
-
   callback()
 }
 
 const isNotLoggedIn = (nextState, replace, callback) => {
-  if (store.getState().user) {
+  if (!store.getState().user) {
     replace({
       pathname: '/login'
     })
@@ -74,9 +72,13 @@ const isNotLoggedIn = (nextState, replace, callback) => {
 
 const connectToDb = (_nextState, _replace, callback) => {
   if (db.isReady && db.isOpen) {
+    store.dispatch(setUser(db.User.me))
     return callback()
   }
-  db.connect('blog').then(() => callback())
+  db.connect('blog').then(() => {
+    store.dispatch(setUser(db.User.me))
+    callback()
+  })
 }
 
 import 'bootstrap/dist/css/bootstrap.min.css'

@@ -1,3 +1,5 @@
+import { List } from 'immutable';
+
 import {
   TAG_CREATED,
   TAG_DELETED,
@@ -5,23 +7,23 @@ import {
   TAGS_FETCHED
 } from '../actions'
 
-export function tags(state = [], action) {
+export function tags(state = List([]), action) {
   let index
   switch (action.type) {
     case TAG_DELETED:
       index = state.indexOf(action.tag)
 
-      return index > -1 ? Array.from(state).splice(index, 1) : []
+      return index > -1 ? List(state).splice(index, 1) : []
     case TAG_CREATED:
-      return Array.from(state).push(action.tag)
+      return List(state).push(action.tag)
     case TAG_UPDATED:
-      let tags = Array.from(state)
+      let tags = List(state)
       index = tags.indexOf(action.tag)
 
       tags[index] = action.tag
       return tags
     case TAGS_FETCHED:
-      return action.tags
+      return List(action.tags)
     default:
       return state
   }

@@ -1,51 +1,28 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
+import { fetchPosts, deletePost } from '../../actions'
+
 import PostListItem from './PostListItem'
-import PostService from '../../shared/PostService'
 
 class PostList extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      posts: [],
-      loading: true
-    }
-
     this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
-    PostService.getAll()
-      .then(posts => {
-        this.setState({
-          posts: posts,
-          loading: false
-        })
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        })
-      })
+    this.props.fetchPosts()
   }
 
   handleDelete(event, post) {
-    event.preventDefault()
-    const index = this.state.posts.indexOf(post)
-
-    PostService.delete(post).then(() => {
-      this.state.posts.splice(index, 1)
-
-      this.setState({
-        posts: this.state.posts
-      })
-    })
+    this.props.deletePost(post)
   }
 
   render() {
-    let postRows = this.state.posts.map((post) => {
+    let postRows = this.props.posts.map((post) => {
       return <PostListItem post={ post } handleDelete={ this.handleDelete } key={ post.id } />
     })
 
@@ -69,4 +46,7 @@ class PostList extends Component {
   }
 }
 
-export default PostList
+export default connect(
+  state => ({ posts: state.posts }),
+  { deletePost, fetchPosts }
+)(PostList)

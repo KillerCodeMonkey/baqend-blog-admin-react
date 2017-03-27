@@ -1,3 +1,6 @@
+import { List } from 'immutable'
+import { db, binding, model } from 'baqend'
+
 import {
   POST_CREATED,
   POST_DELETED,
@@ -10,15 +13,15 @@ import {
   POSTS_FETCHED
 } from '../actions'
 
-export function posts(state = [], action) {
+export function posts(state = List([]), action) {
   let index
   switch (action.type) {
     case POST_DELETED:
       index = state.indexOf(action.post)
 
-      return index > -1 ? Array.from(state).splice(index, 1) : []
+      return index > -1 ? List(state).splice(index, 1) : []
     case POST_CREATED:
-      return Array.from(state).push(action.post)
+      return List(state).push(action.post)
     case POST_PREVIEW_IMAGE_DELETED:
     case POST_PREVIEW_IMAGE_UPLOADED:
     case POST_IMAGE_DELETED:
@@ -26,12 +29,12 @@ export function posts(state = [], action) {
     case POST_UPDATED:
       index = state.indexOf(action.post)
 
-      let posts = Array.from(state)
+      let posts = List(state)
       posts[index] = action.post
 
       return posts
     case POSTS_FETCHED:
-      return action.posts
+      return List(action.posts)
     default:
       return state
   }

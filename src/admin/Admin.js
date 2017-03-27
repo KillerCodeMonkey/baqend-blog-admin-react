@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withRouter, IndexLink, Link } from 'react-router'
 
 import { db } from 'baqend'
 
-import UserService from '../shared/UserService'
+import { logout } from '../actions'
 
 class Admin extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class Admin extends Component {
   }
 
   logout() {
-    UserService.logout().then(() => {
+    this.props.logout().then(() => {
       this.props.router.push('/login')
     })
   }
@@ -52,4 +53,7 @@ class Admin extends Component {
   }
 }
 
-export default withRouter(Admin)
+export default connect(
+  state => ({}),
+  { logout }
+)(withRouter(Admin))

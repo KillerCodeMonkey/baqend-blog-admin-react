@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 
-import UserService from '../shared/UserService'
+import { login } from '../actions'
+
 import FlashMessage from '../shared/FlashMessage'
 
 class Login extends Component {
@@ -29,14 +32,9 @@ class Login extends Component {
       loading: true
     })
 
-    UserService
+    this.props
       .login(this.state.login, this.state.password)
-      .then(() => {
-        this.setState({
-          loading: false
-        })
-        this.props.router.push('/admin/posts')
-      })
+      .then(() => this.props.router.push('/admin/posts'))
       .catch((err) => {
         this.setState({
           error: err,
@@ -97,4 +95,7 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default connect(
+  state => ({}),
+  { login }
+)(withRouter(Login))

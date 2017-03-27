@@ -187,6 +187,6 @@ export function updatePost(post, formData, tags) {
     Object.assign(post, formData)
     post.tags = tags
 
-    return post.save({refresh: true}).then(post => dispatch(postUpdated(post)))
+    return post.save({refresh: true}).then(updated_post => dispatch(postUpdated(updated_post)))
   }
 }

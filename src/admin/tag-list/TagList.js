@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import { createTag, updateTag, deleteTag } from '../../actions'
 
 import TagListItem from './TagListItem'
-import TagService from '../../shared/TagService'
 
 class TagList extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      tags: [],
       newTag: {
         alias: null,
         name: null
@@ -21,12 +22,6 @@ class TagList extends Component {
     this.handleDelete = this.handleDelete.bind(this)
   }
 
-  componentDidMount() {
-    TagService.get().then(tags => {
-      this.setState({ tags: tags })
-    })
-  }
-
   handleCreate(event) {
     event.preventDefault()
 
@@ -34,8 +29,8 @@ class TagList extends Component {
       return
     }
 
-    TagService
-      .create(this.state.newTag)
+    this.props
+      .createTag(this.state.newTag)
       .then(tags => {
         this.setState({
           tags: tags,
@@ -52,13 +47,7 @@ class TagList extends Component {
   handleDelete(event, tag) {
     event.preventDefault()
 
-    TagService
-      .delete(tag)
-      .then(tags => {
-        this.setState({
-          tags: tags
-        })
-      })
+    this.props.deleteTag(tag);
   }
 
   handleChange(event) {
@@ -73,20 +62,14 @@ class TagList extends Component {
   handleEdit(event, tag, formData) {
     event.preventDefault()
 
-    TagService
-      .update(tag, formData)
-      .then(tags => {
-        this.setState({
-          tags: tags
-        })
-      })
+    this.props.updateTag(tag, formData)
   }
 
   render() {
     let tagRows
 
-    if (this.state.tags.length) {
-      tagRows = this.state.tags.map((tag) => {
+    if (this.props.tags.size) {
+      tagRows = this.props.tags.map((tag) => {
         return <TagListItem tag={ tag } handleDelete={ this.handleDelete } handleEdit={ this.handleEdit } key={ tag.id } />
       })
     }
@@ -137,4 +120,11 @@ class TagList extends Component {
   }
 }
 
-export default TagList
+export default connect(
+  state => ({
+    tags: state.tags
+  }),
+  {
+    createTag, deleteTag, updateTag
+  }
+)(TagList)

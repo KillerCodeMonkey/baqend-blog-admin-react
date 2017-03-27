@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
+import { connect } from 'react-redux'
 
 import { db } from 'baqend'
 
-import PostService from '../../shared/PostService'
+import { createPost } from '../../actions'
 import PostForm from '../../shared/PostForm'
 
 class PostNew extends Component {
@@ -19,8 +20,8 @@ class PostNew extends Component {
   handleSubmit(event, formData, tags) {
     event.preventDefault()
 
-    PostService
-      .create(formData, tags)
+    this.props
+      .createPost(formData, tags)
       .then((post) => {
         this.props.router.push('/admin/posts/' + post.slug)
       })
@@ -29,10 +30,15 @@ class PostNew extends Component {
   render() {
     return (
       <div className="container-fluid">
-        <PostForm tags={ new db.Set() } handleSubmit={ this.handleSubmit } />
+        <PostForm tags={ new db.Set() }  defaultTags={ this.props.tags } handleSubmit={ this.handleSubmit } />
       </div>
     )
   }
 }
 
-export default withRouter(PostNew)
+export default connect(
+  state => ({
+    tags: state.tags
+  }),
+  { createPost }
+)(withRouter(PostNew))

@@ -1,9 +1,17 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 
 import { db } from 'baqend'
 
-import PostService from '../../shared/PostService'
-import CommentService from '../../shared/CommentService'
+import {
+  fetchPost,
+  fetchComments,
+  updatePost,
+  uploadPostImage,
+  uploadPostPreviewImage,
+  deletePostImage,
+  deletePostPreviewImage
+} from '../../actions'
 
 import PostForm from '../../shared/PostForm'
 import CommentList from './CommentList'
@@ -50,12 +58,6 @@ class PostDetail extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      post: null,
-      comments: [],
-      loading: true
-    }
-
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.handleUploadImage = this.handleUploadImage.bind(this)
@@ -66,109 +68,59 @@ class PostDetail extends Component {
   }
 
   componentDidMount() {
-    PostService.getBySlug(this.props.params.slug)
+    this.props.fetchPost(this.props.params.slug)
       .then(post => {
-        this.post = post
-
-        this.setState({
-          post: post,
-          loading: false
-        })
-        return CommentService.getForPost(post)
-      })
-      .then(comments => {
-        this.setState({
-          comments: comments
-        })
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        })
+        return this.props.fetchComments(post)
       })
   }
 
   handleUploadImage(event) {
-    PostService
-      .uploadImage(this.post, event.target.files[0])
-      .then((post) => {
-        this.setState({
-          post: post
-        })
-      })
+    this.props.uploadPostImage(this.props.post, event.target.files[0])
   }
 
   handleUploadPreview(event) {
-    PostService
-      .uploadPreviewImage(this.post, event.target.files[0])
-      .then((post) => {
-        this.setState({
-          post: post
-        })
-      })
+   this.props.uploadPostPreviewImage(this.props.post, event.target.files[0])
   }
 
   handleDeletePreview(event) {
     event.preventDefault()
 
-    PostService.deletePreview(this.post)
-      .then((post) => {
-        this.post = post
-
-        this.setState({
-          post: this.post
-        })
-      })
+    this.props.deletePostPreviewImage(this.props.post)
   }
 
   handleDeleteImage(event, image) {
     event.preventDefault()
 
-    PostService
-      .deleteImage(this.post, image)
-      .then((post) => {
-        this.post = post
-
-        this.setState({
-          post: this.post
-        })
-      })
+    this.props.deletePostImage(this.props.post, image)
   }
 
   handleSubmit(event, formData, tags) {
     event.preventDefault()
 
-    PostService
-      .update(this.post, formData, tags)
-      .then((post) => {
-        this.post = post
-
-        this.setState({
-          post: post
-        })
-      })
+    this.props.updatePost(this.props.post, formData, tags)
   }
 
   render() {
     let postForm, commentList, imageList, previewImage
-    if (this.state.post) {
-      let tags = this.state.post.tags ? this.state.post.tags : new db.Set()
-      postForm = <PostForm post={ this.state.post } tags={tags} handleSubmit={ this.handleSubmit } />
 
-      if (this.state.post.images) {
-        imageList = this.state.post.images.map((image) => {
+    if (this.props.post) {
+      let tags = this.props.post.tags ? this.props.post.tags : new db.Set()
+      postForm = <PostForm post={ this.props.post } defaultTags={ this.props.tags } tags={tags} handleSubmit={ this.handleSubmit } />
+
+      if (this.props.post.images) {
+        imageList = this.props.post.images.map((image) => {
           return <ImageListItem image={ image } key={ image.id } handleDelete={ this.handleDeleteImage } />
         })
       }
 
-      if (this.state.post.preview_image) {
-        previewImage = <ImageListItem image={ this.state.post.preview_image } handleDelete={ this.handleDeletePreview } />
+      if (this.props.post.preview_image) {
+        previewImage = <ImageListItem image={ this.props.post.preview_image } handleDelete={ this.handleDeletePreview } />
       } else {
         previewImage = <ImageUploader handleFile={ this.handleUploadPreview } />
       }
     }
-    if (this.state.comments.length) {
-      commentList = <CommentList comments={ this.state.comments } />
+    if (this.props.comments.length) {
+      commentList = <CommentList comments={ this.props.comments } />
     }
 
     return (
@@ -192,4 +144,22 @@ class PostDetail extends Component {
   }
 }
 
-export default PostDetail
+export default connect(
+  (state) => {
+    console.log(state)
+    return {
+      post: state.post,
+      comments: state.comments,
+      tags: state.tags
+    }
+  },
+  {
+    fetchPost,
+    fetchComments,
+    updatePost,
+    uploadPostImage,
+    uploadPostPreviewImage,
+    deletePostImage,
+    deletePostPreviewImage
+  }
+)(PostDetail)
