@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter, IndexLink, Link } from 'react-router'
-
 import { db } from 'baqend'
 
 import { logout } from '../actions'

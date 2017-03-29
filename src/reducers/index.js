@@ -1,4 +1,5 @@
 export * from './comment'
+export * from './loading'
 export * from './post'
 export * from './tag'
 export * from './user'

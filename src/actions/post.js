@@ -1,5 +1,7 @@
 import { db } from 'baqend'
 
+import { isLoading, isNotLoading } from './loading'
+
 export const POST_CREATED = 'POST_CREATED'
 function postCreated(post) {
   return {
@@ -14,7 +16,16 @@ export function createPost(formData, tags) {
     Object.assign(post, formData)
     post.tags = tags
 
-    return post.save({ refresh: true }).then(post => dispatch(postCreated(post)))
+    dispatch(isLoading())
+
+    return post.save({ refresh: true })
+      .then(post => {
+        dispatch(isNotLoading())
+        dispatch(postCreated(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -27,10 +38,19 @@ function postsFetched(posts) {
 }
 export function fetchPosts() {
   return (dispatch, getState) => {
+
+    dispatch(isLoading())
+
     return db.Post
       .find()
       .resultList()
-      .then(posts => dispatch(postsFetched(posts)))
+      .then(posts => {
+        dispatch(isNotLoading())
+        dispatch(postsFetched(posts))
+
+        return posts
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -50,12 +70,22 @@ export function deletePost(post) {
     if (post.preview_image) {
       deleteTasks.push(post.preview_image.delete())
     }
+    if (post.images) {
+      post.images.forEach((image) => {
+        deleteTasks.push(image.delete())
+      })
+    }
 
-    post.images.forEach((image) => {
-      deleteTasks.push(image.delete())
-    })
+    dispatch(isLoading())
 
-    return Promise.all(deleteTasks).then(() => dispatch(postDeleted(post)))
+    return Promise.all(deleteTasks)
+      .then(() => {
+        dispatch(isNotLoading())
+        dispatch(postDeleted(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -68,6 +98,9 @@ function postPreviewImageDeleted(post) {
 }
 export function deletePostPreviewImage(post) {
   return (dispatch, getState) => {
+
+    dispatch(isLoading())
+
     return post
       .preview_image
       .delete()
@@ -76,7 +109,13 @@ export function deletePostPreviewImage(post) {
 
         return post.save()
       })
-      .then(post => dispatch(postPreviewImageDeleted(post)))
+      .then(post => {
+        dispatch(isNotLoading())
+        dispatch(postPreviewImageDeleted(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -94,6 +133,8 @@ export function uploadPostPreviewImage(post, formFile) {
       parent: '/www/images/posts/' + post.key
     })
 
+    dispatch(isLoading())
+
     return file
       .upload()
       .then((file) => {
@@ -101,7 +142,14 @@ export function uploadPostPreviewImage(post, formFile) {
         post.preview_image = file
 
         return post.save()
-      }).then(post => dispatch(postPreviewImageUploaded(post)))
+      })
+      .then(post => {
+        dispatch(isNotLoading())
+        dispatch(postPreviewImageUploaded(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -114,6 +162,9 @@ function postImageDeleted(post) {
 }
 export function deletePostImage(post, image) {
   return (dispatch, getState) => {
+
+    dispatch(isLoading())
+
     return image
       .delete()
       .then(() => {
@@ -122,7 +173,13 @@ export function deletePostImage(post, image) {
 
         return post.save()
       })
-      .then(post => dispatch(postImageDeleted(post)))
+      .then(post => {
+        dispatch(isNotLoading())
+        dispatch(postImageDeleted(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -140,6 +197,8 @@ export function uploadPostImage(post, formFile) {
       parent: '/www/images/posts/' + post.key
     })
 
+    dispatch(isLoading())
+
     return file
       .upload()
       .then((file) => {
@@ -147,7 +206,14 @@ export function uploadPostImage(post, formFile) {
         post.images.push(file)
 
         return post.save()
-      }).then(post => dispatch(postImageUploaded(post)))
+      })
+      .then(post => {
+        dispatch(isNotLoading())
+        dispatch(postImageUploaded(post))
+
+        return post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -160,6 +226,9 @@ function postFetched(post) {
 }
 export function fetchPost(slug) {
   return (dispatch, getState) => {
+
+    dispatch(isLoading())
+
     return db.Post
       .find()
       .equal('slug', slug)
@@ -169,8 +238,12 @@ export function fetchPost(slug) {
           post.images = new db.List()
         }
 
-        return dispatch(postFetched(post))
+        dispatch(isNotLoading())
+        dispatch(postFetched(post))
+
+        return post
       })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -187,6 +260,15 @@ export function updatePost(post, formData, tags) {
     Object.assign(post, formData)
     post.tags = tags
 
-    return post.save({refresh: true}).then(updated_post => dispatch(postUpdated(updated_post)))
+    dispatch(isLoading())
+
+    return post.save({refresh: true})
+      .then(updated_post => {
+        dispatch(isNotLoading())
+        dispatch(postUpdated(updated_post))
+
+        return updated_post
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }

@@ -15,13 +15,7 @@ import thunkMiddleware from 'redux-thunk'
 
 import { db } from 'baqend'
 
-import {
-  comments,
-  post,
-  posts,
-  tags,
-  user
-} from './reducers'
+import * as APP_REDUCERS from './reducers'
 
 import { fetchTags, setUser } from './actions'
 
@@ -38,11 +32,7 @@ import TagList from './admin/tag-list/TagList'
 const store = createStore(
   combineReducers({
     routing: routerReducer,
-    comments,
-    post,
-    posts,
-    tags,
-    user
+    ...APP_REDUCERS
   }),
   applyMiddleware(
     thunkMiddleware, // lets us dispatch() functions

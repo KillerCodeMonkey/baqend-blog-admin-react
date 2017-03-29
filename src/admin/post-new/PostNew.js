@@ -22,9 +22,7 @@ class PostNew extends Component {
 
     this.props
       .createPost(formData, tags)
-      .then((post) => {
-        this.props.router.push('/admin/posts/' + post.slug)
-      })
+      .then((post) => this.props.router.push('/admin/posts/' + post.slug))
   }
 
   render() {

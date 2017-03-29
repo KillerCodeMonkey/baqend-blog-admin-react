@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { db, binding, model } from 'baqend'
 
 import {
   POST_CREATED,
@@ -49,10 +48,6 @@ export function post(state = { data: null }, action) {
     case POST_IMAGE_DELETED:
     case POST_IMAGE_UPLOADED:
     case POST_UPDATED:
-      // const postJSON = Object.assign({}, action.post.toJSON(), { acl: null })
-
-      // return db.Post.fromJSON(postJSON)
-
       return {
         data: action.post
       }

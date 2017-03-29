@@ -116,8 +116,6 @@ class PostForm extends Component {
           </textarea>
         </div>
 
-
-
         <button type="submit" className="btn btn-primary">Speichern</button>
       </form>
     )

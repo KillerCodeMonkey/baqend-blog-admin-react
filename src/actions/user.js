@@ -1,5 +1,7 @@
 import { db, binding } from 'baqend'
 
+import { isLoading, isNotLoading } from './loading'
+
 export const LOGGED_IN = 'LOGGED_IN'
 function loggedIn(user) {
   return {
@@ -9,7 +11,17 @@ function loggedIn(user) {
 }
 export function login(login, password) {
   return (dispatch, getState) => {
-    return db.User.login(login, password).then(() => dispatch(loggedIn(new binding.Entity(db.User.me))))
+    dispatch(isLoading())
+
+    return db.User
+      .login(login, password)
+      .then(() => { 
+        dispatch(isNotLoading())
+        dispatch(loggedIn(new binding.Entity(db.User.me)))
+
+        return
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -22,7 +34,17 @@ function loggedOut() {
 }
 export function logout() {
   return (dispatch, getState) => {
-    return db.User.logout().then(() => dispatch(loggedOut()))
+    dispatch(isLoading())
+
+    return db.User
+      .logout()
+      .then(() => {
+        dispatch(isNotLoading())
+        dispatch(loggedOut())
+
+        return
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 

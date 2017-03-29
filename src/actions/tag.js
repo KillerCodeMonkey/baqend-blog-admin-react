@@ -1,5 +1,7 @@
 import { db } from 'baqend'
 
+import { isLoading, isNotLoading } from './loading'
+
 export const TAG_CREATED = 'TAG_CREATED'
 function tagCreated(tag) {
   return {
@@ -11,9 +13,17 @@ export function createTag(formData) {
   return (dispatch, getState) => {
     let tag = new db.Tag(formData)
 
+    dispatch(isLoading())
+
     return tag
       .save({refresh: true})
-      .then(tag => dispatch(tagCreated(tag)))
+      .then(tag => {
+        dispatch(isNotLoading())
+        dispatch(tagCreated(tag))
+
+        return tag
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -26,7 +36,16 @@ function tagDeleted(tag) {
 }
 export function deleteTag(tag) {
   return (dispatch, getState) => {
-    return tag.delete().then(() => dispatch(tagDeleted(tag)))
+    dispatch(isLoading())
+
+    return tag.delete()
+      .then(() => {
+        dispatch(isNotLoading())
+        dispatch(tagDeleted(tag))
+
+        return
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -41,9 +60,17 @@ export function updateTag(tag, formData) {
   return (dispatch, getState) => {
     Object.assign(tag, formData)
 
+    dispatch(isLoading())
+
     return tag
       .save({refresh: true})
-      .then((tag) => dispatch(tagUpdated(tag)))
+      .then((tag) => {
+        dispatch(isNotLoading())
+        dispatch(tagUpdated(tag))
+
+        return tag
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
 
@@ -56,6 +83,17 @@ function tagsFetched(tags) {
 }
 export function fetchTags() {
   return (dispatch, getState) => {
-    return db.Tag.find().resultList().then(tags => dispatch(tagsFetched(tags)))
+    dispatch(isLoading())
+
+    return db.Tag
+      .find()
+      .resultList()
+      .then(tags => {
+        dispatch(isNotLoading())
+        dispatch(tagsFetched(tags))
+
+        return tags
+      })
+      .catch(() => dispatch(isNotLoading()))
   }
 }
