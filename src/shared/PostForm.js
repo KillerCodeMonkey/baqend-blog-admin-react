@@ -80,7 +80,7 @@ class PostForm extends Component {
         <div className="form-group">
           <label htmlFor="publishedAt">Datum</label>
           <input
-            type="string"
+            type="text"
             name="publishedAt"
             id="publishedAt"
             className="form-control"

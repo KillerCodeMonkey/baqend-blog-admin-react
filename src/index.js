@@ -82,11 +82,11 @@ ReactDOM.render(
         <IndexRoute component={ Login }  onEnter={ isLoggedIn } />
         <Route path="login" component={ Login } onEnter={ isLoggedIn } />
         <Route path="admin" component={ Admin } onEnter={ isNotLoggedIn } >
-          <IndexRoute component={PostList} onEnter={ isNotLoggedIn } />
-          <Route path="posts/new" component={PostNew} />
-          <Route path="posts/:slug" component={PostDetail} />
-          <Route path="posts" component={PostList} />
-          <Route path="tags" component={TagList} />
+          <IndexRoute component={ PostList } />
+          <Route path="posts/new" component={ PostNew } />
+          <Route path="posts/:slug" component={ PostDetail } />
+          <Route path="posts" component={ PostList } />
+          <Route path="tags" component={ TagList } />
         </Route>
       </Route>
       <Redirect from="*" to="/login" />

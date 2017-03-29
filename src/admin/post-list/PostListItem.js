@@ -3,8 +3,6 @@ import { Link } from 'react-router'
 
 class PostListItem extends Component {
   render() {
-    const date = new Date(this.props.post.publishedAt)
-    const dateTimeString = date.toDateString() + ' ' + date.toTimeString()
     return (
       <tr>
         <td>
@@ -13,7 +11,7 @@ class PostListItem extends Component {
           </Link>
         </td>
         <td>
-          { dateTimeString }
+          { this.props.post.publishedAt ? this.props.post.publishedAt.toISOString() : '-' }
         </td>
         <td>
           <button type="button" className="btn btn-danger pull-right" onClick={e => this.props.handleDelete(e, this.props.post) }>Löschen</button>

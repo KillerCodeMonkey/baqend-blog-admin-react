@@ -256,8 +256,9 @@ function postUpdated(post) {
 }
 export function updatePost(post, formData, tags) {
   return (dispatch, getState) => {
-    formData.publishedAt = formData.publishedAt ? new Date(formData.publishedAt) : null
-    Object.assign(post, formData)
+    Object.assign(post, formData, {
+      publishedAt: formData.publishedAt ? new Date(formData.publishedAt) : formData.publishedAt === '' ? null : post.publishedAt
+    })
     post.tags = tags
 
     dispatch(isLoading())
