@@ -1,9 +1,8 @@
 import { List } from 'immutable';
 
 import {
-  COMMENT_CREATED,
   COMMENT_DELETED,
-  COMMENTS_RECEIVED
+  COMMENTS_FETCHED
 } from '../actions'
 
 export function comments(state = List([]), action) {
@@ -12,9 +11,7 @@ export function comments(state = List([]), action) {
       const index = state.indexOf(action.comment)
 
       return index > -1 ? List(state).splice(index, 1) : []
-    case COMMENT_CREATED:
-      return List(state).push(action.comment)
-    case COMMENTS_RECEIVED:
+    case COMMENTS_FETCHED:
       return List(action.comments)
     default:
       return state

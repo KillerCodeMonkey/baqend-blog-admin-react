@@ -119,7 +119,8 @@ class PostDetail extends Component {
         previewImage = <ImageUploader handleFile={ this.handleUploadPreview } />
       }
     }
-    if (this.props.comments.length) {
+
+    if (this.props.comments.size) {
       commentList = <CommentList comments={ this.props.comments } />
     }
 

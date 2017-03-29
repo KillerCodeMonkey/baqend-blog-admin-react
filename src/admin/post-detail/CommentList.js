@@ -35,7 +35,7 @@ class CommentList extends Component {
 }
 
 CommentList.propTypes = {
-  comments: PropTypes.array.isRequired
+  comments: PropTypes.object.isRequired
 }
 
 export default connect(
