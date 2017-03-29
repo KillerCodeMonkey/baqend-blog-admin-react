@@ -40,7 +40,7 @@ export function posts(state = List([]), action) {
   }
 }
 
-export function post(state = null, action) {
+export function post(state = { data: null }, action) {
   switch (action.type) {
     case POST_CREATED:
     case POST_FETCHED:
@@ -49,9 +49,13 @@ export function post(state = null, action) {
     case POST_IMAGE_DELETED:
     case POST_IMAGE_UPLOADED:
     case POST_UPDATED:
-      const postJSON = Object.assign({}, action.post.toJSON(), { acl: null })
+      // const postJSON = Object.assign({}, action.post.toJSON(), { acl: null })
 
-      return db.Post.fromJSON(postJSON)
+      // return db.Post.fromJSON(postJSON)
+
+      return {
+        data: action.post
+      }
     default:
       return state
   }

@@ -75,46 +75,46 @@ class PostDetail extends Component {
   }
 
   handleUploadImage(event) {
-    this.props.uploadPostImage(this.props.post, event.target.files[0])
+    this.props.uploadPostImage(this.props.post.data, event.target.files[0])
   }
 
   handleUploadPreview(event) {
-   this.props.uploadPostPreviewImage(this.props.post, event.target.files[0])
+   this.props.uploadPostPreviewImage(this.props.post.data, event.target.files[0])
   }
 
   handleDeletePreview(event) {
     event.preventDefault()
 
-    this.props.deletePostPreviewImage(this.props.post)
+    this.props.deletePostPreviewImage(this.props.post.data)
   }
 
   handleDeleteImage(event, image) {
     event.preventDefault()
 
-    this.props.deletePostImage(this.props.post, image)
+    this.props.deletePostImage(this.props.post.data, image)
   }
 
   handleSubmit(event, formData, tags) {
     event.preventDefault()
 
-    this.props.updatePost(this.props.post, formData, tags)
+    this.props.updatePost(this.props.post.data, formData, tags)
   }
 
   render() {
     let postForm, commentList, imageList, previewImage
 
-    if (this.props.post) {
-      let tags = this.props.post.tags ? this.props.post.tags : new db.Set()
-      postForm = <PostForm post={ this.props.post } defaultTags={ this.props.tags } tags={tags} handleSubmit={ this.handleSubmit } />
+    if (this.props.post.data) {
+      let tags = this.props.post.data.tags ? this.props.post.data.tags : new db.Set()
+      postForm = <PostForm post={ this.props.post.data } defaultTags={ this.props.tags } tags={tags} handleSubmit={ this.handleSubmit } />
 
-      if (this.props.post.images) {
-        imageList = this.props.post.images.map((image) => {
+      if (this.props.post.data.images) {
+        imageList = this.props.post.data.images.map((image) => {
           return <ImageListItem image={ image } key={ image.id } handleDelete={ this.handleDeleteImage } />
         })
       }
 
-      if (this.props.post.preview_image) {
-        previewImage = <ImageListItem image={ this.props.post.preview_image } handleDelete={ this.handleDeletePreview } />
+      if (this.props.post.data.preview_image) {
+        previewImage = <ImageListItem image={ this.props.post.data.preview_image } handleDelete={ this.handleDeletePreview } />
       } else {
         previewImage = <ImageUploader handleFile={ this.handleUploadPreview } />
       }
@@ -146,7 +146,6 @@ class PostDetail extends Component {
 
 export default connect(
   (state) => {
-    console.log(state)
     return {
       post: state.post,
       comments: state.comments,
